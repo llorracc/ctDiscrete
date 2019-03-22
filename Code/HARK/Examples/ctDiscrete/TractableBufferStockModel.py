@@ -52,7 +52,7 @@
 # <p style="text-align: center;"><small><small>Generator: TractableBufferStockModel</small></small></p>
 
 # %% [markdown]
-# [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/econ-ark/REMARK/master?filepath=REMARKs%2FctDiscrete%2FCode%2FHARK%2FExamples%2FTractableBufferStockModel.ipynb)
+# [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/llorracc/ctDiscrete/master?filepath=Code%2FHARK%2FExamples%2FctDiscrete%2FTractableBufferStockModel.ipynb)
 
 # %% [markdown]
 # This notebook uses the [Econ-ARK/HARK](https://github.com/econ-ark/hark) toolkit to describe the main results and reproduce the figures in the paper [A Tractable Model of Buffer Stock Saving](http://www.econ2.jhu.edu/people/ccarroll/papers/ctDiscrete/)

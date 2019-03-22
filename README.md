@@ -1,1 +1,1 @@
-# ctDiscrete is the public repo for the paper ctDiscrete
+When complete, the downlodeer should be able to reproduce the entire paper

@@ -255,10 +255,9 @@ def cEDelEqZero(R, κ, Pi, mE): # Function that gives us locus of where change i
     cE = (R*κ*mE*Pi)/(1+R*κ*Pi)
     return cE
 
-# %%
-MyTBStype = TractableConsumerType(**TBS_dictionary)
+# %% {"code_folding": [0]}
+# Setup and solve an instance of the tractable buffer stock model
 
-# %%
 MyTBStype.solve()
 
 UnempPrb = MyTBStype.UnempPrb
@@ -323,7 +322,8 @@ else:
 #
 # is the level of (normalized) human wealth. $\bar{c}(m)$  is the solution to the no-risk version of the model; it is depicted in order to introduce another property of the model: As wealth approaches inﬁnity, the solution to the problem with risky labor income approaches the solution to the no-risk problem arbitrarily closely.
 
-# %%
+# %% {"code_folding": [0]}
+# Make the consumption function and its asymptotes
 h = MyTBStype.h
 def PerfForesightC(h, κ, mE):
     cE = (mE-1+h)*κ
@@ -363,7 +363,9 @@ else:
 # %% [markdown]
 # Figure 3 illustrates some of the key points in a diﬀerent way. It depicts the growth rate of consumption $c_{t+1}^{e} /c_{t}^{e}$ as a function of $m_{t}^{e}$.
 
-# %%
+# %% {"code_folding": [0]}
+# Make the growth rate figure
+
 mE_range = np.linspace(0,15, 1000)
 cE = MyTBStype.solution[0].cFunc(mE_range)
 cU = MyTBStype.solution[0].cFunc_U(mE_range)
@@ -385,7 +387,7 @@ plt.tick_params(labelbottom=False, labelleft=False,left='off',right='off',bottom
 plt.text(8.1,-0.041,"$m_{t}^{e}$",fontsize = 22)
 plt.text(0,0.061,r'Growth',fontsize = 22)
 plt.text(-0.2,np.log(PermGroFacCmp), r'$\gamma$',fontsize = 22)
-plt.text(-1.7,thorn, r'$\rho^{-1}(r-\theta) \approx\phi$',fontsize = 22)
+plt.text(-1.7,thorn, r'$\rho^{-1}(r-\vartheta) \approx\phi$',fontsize = 22)
 plt.text(mTarg-0.1,-0.045, r'$\check{m^{e}}$',fontsize = 22)
 plt.text(2.5,0.025, r'$\Delta \log \  c_{t+1}^{e} \approx \phi + \wp(1 + \omega \nabla_{t+1})\nabla_{t+1} $',
          fontsize = 22)
@@ -406,7 +408,8 @@ else:
 # %% [markdown]
 # ### Figure 4 : The Effects of an Increase in the Interest Rate
 
-# %%
+# %% {"code_folding": [0]}
+# Experiment: An increase in the interest rate 
 MyTBStype_1 = TractableConsumerType(**TBS_dictionary)
 Rnew = MyTBStype.Rfree + 0.04
 MyTBStype_1.Rfree = Rnew 
@@ -443,8 +446,8 @@ plt.text(8.1,-0.041,"$m_{t}^{e}$",fontsize = 22)
 plt.text(0,0.05,r'Growth',fontsize = 22)
 plt.tick_params(labelbottom=False, labelleft=False,left='off',right='off',bottom='off',top='off')
 plt.text(-0.2,np.log(PermGroFacCmp), r'$\gamma$',fontsize = 22)
-plt.text(-1.7,thorn, r'$\rho^{-1}(r-\theta) \approx\phi$',fontsize = 22)
-plt.text(-1.75,thorn_1, r'$\rho^{-1}(r^{\prime}-\theta) \approx \phi^{\prime}$',fontsize = 22)
+plt.text(-1.7,thorn, r'$\rho^{-1}(r-\vartheta) \approx\phi$',fontsize = 22)
+plt.text(-1.75,thorn_1, r'$\rho^{-1}(r^{\prime}-\vartheta) \approx \phi^{\prime}$',fontsize = 22)
 plt.text(mTarg-0.1,-0.045, r'$\check{m}$',fontsize = 22)
 plt.text(mTarg_1-0.1,-0.045, r'$\check{m}^{\prime}$',fontsize = 22)
 plt.text(0.8,0.025, r'$\Delta \log \  c_{t+1}^{e}$',fontsize = 22)
@@ -468,7 +471,8 @@ else:
 # %% [markdown]
 # ### Figure 5 : The Effects of an Increase in Unemployment Risk
 
-# %%
+# %% {"code_folding": [0]}
+# Experiment: An increase in unemployment risk
 MyTBStype_2 = TractableConsumerType(**TBS_dictionary)
 Unempnew = MyTBStype.UnempPrb * 3
 MyTBStype_2.UnempPrb = Unempnew
@@ -508,7 +512,7 @@ plt.text(0,0.072,r'Growth',fontsize = 22)
 plt.tick_params(labelbottom=False, labelleft=False,left='off',right='off',bottom='off',top='off')
 plt.text(-0.2,np.log(PermGroFacCmp), r'$\gamma$',fontsize = 22)
 plt.text(-0.22,np.log(PermGroFacCmp_2), r'$\gamma^{\prime}$',fontsize = 22)
-plt.text(-1.7,thorn, r'$\rho^{-1}(r-\theta) \approx\phi$',fontsize = 22)
+plt.text(-1.7,thorn, r'$\rho^{-1}(r-\vartheta) \approx\phi$',fontsize = 22)
 plt.text(mTarg-0.1,-0.045, r'$\check{m}$',fontsize = 22)
 plt.text(mTarg_2-0.1,-0.045, r'$\check{m}^{\prime}$',fontsize = 22)
 plt.text(1.5,0.05, r'$\Delta \log \ c_{t+1}^{e} \prime$',fontsize = 18)
@@ -534,9 +538,10 @@ else:
     plt.show(block=True)
 
 # %% [markdown]
-# ### Figure 6: The Effects of Lower $\theta$ On Consumption Function
+# ### Figure 6: The Effects of Lower $\vartheta$ On Consumption Function
 
-# %%
+# %% {"code_folding": [0]}
+# Experiment: A decline in the time preference rate 
 MyTBStype_3 = TractableConsumerType(**TBS_dictionary)
 DiscFacnew = (1/(1.1-0.02))
 MyTBStype_3.DiscFac = DiscFacnew
@@ -587,9 +592,10 @@ else:
     plt.show(block=True)
 
 # %% [markdown]
-# ### Figure 7: Path of $c^{e}$ Before and After $\theta$ Decline
+# ### Figure 7: Path of $c^{e}$ Before and After $\vartheta$ Decline
 
-# %%
+# %% {"code_folding": [0]}
+# Experiment: Time path of consumption around a time preference rate decline
 MyTBStype.T_sim = 100
 MyTBStype.aLvlInitMean = 1.
 MyTBStype.aLvlInitStd = 0.
@@ -641,9 +647,10 @@ else:
     plt.show(block=True)
 
 # %% [markdown]
-# ### Figure 8 : Path of $m^{e}$ Before and After $\theta$ Decline
+# ### Figure 8 : Path of $m^{e}$ Before and After $\vartheta$ Decline
 
-# %%
+# %% {"code_folding": [0]}
+# Market resources around a time preference rate decline
 plt.figure(figsize=(12,9))
 plt.scatter(TimePeriod, mE, color = 'k',s =6)
 plt.text(121,0, r'Time', fontsize = 22)
@@ -663,9 +670,11 @@ else:
     plt.show(block=True)
 
 # %% [markdown]
-# ### Figure 9 : Marginal Propensity to Consume $\kappa_{t}$ Before and After $\theta$ Decline
+# ### Figure 9 : Marginal Propensity to Consume $\kappa_{t}$ Before and After $\vartheta$ Decline
 
-# %%
+# %% {"code_folding": [0]}
+# MPC around a time preference rate decline
+
 MPC = np.zeros((115,1))
 MPC[:15,:] = MyTBStype.solution[0].cFunc.eval_with_derivative(ssmE)[1]
 MPC[15:,:] = MyTBStype_3.solution[0].cFunc.eval_with_derivative(MyTBStype_3.mLvlNow_hist)[1][10:]

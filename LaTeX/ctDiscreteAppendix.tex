@@ -1,0 +1,194 @@
+\centerline{\bf \LARGE Appendix}
+\renewcommand{\thesection}{A.\arabic{section}}
+\setcounter{section}{0}
+
+
+\section{Taylor Approximation for Consumption Growth}\label{sec:cGroTaylor}
+\PTremark{Minor edits in the appendix, mostly presentation. }
+Applying a second-order Taylor approximation to \eqref{eq:cedel}, simplifying, and rearranging yields:
+\begin{eqnarray*}
+        \left\{1+\urate\left[\left(\frac{\cRatE_{t+1}}{\cU_{t+1}}\right)^{\CRRA}-1\right]\right\}^{1/\CRRA} & = & \left\{1+\urate\left[\left(\frac{\cU_{t+1}+\cRatE_{t+1}-\cU_{t+1}}{\cU_{t+1}}\right)^{\CRRA}-1\right]\right\}^{1/\CRRA}
+\\      & = & \left\{1+\urate\left[\left(1+\nabla _{t+1}\right)^{\CRRA}-1\right]\right\}^{1/\CRRA}
+\\      & \approx &      \left\{1+\urate\left[1+\CRRA \nabla _{t+1}+ \CRRA (\nabla _{t+1})^{2}\prudEx-1\right]\right\}^{1/\CRRA}
+\\ & = &         \left\{1+ \CRRA \urate (\nabla _{t+1}+ (\nabla _{t+1})^{2}\prudEx)\right\}^{1/\CRRA}
+\\ & \approx & 1+ \urate  \left(1+\nabla _{t+1}\prudEx\right)\nabla _{t+1}. \label{eq:cTaylorRaw}
+\end{eqnarray*}
+
+
+\section{The Exact Formula for $\mTarg^{\null}$}
+The steady-state value of $\mRatE$, denoted $\mTarg^{\null}$, is the solution of \eqref{eq:DceEq0}-\eqref{eq:xDelEqZero}, which may be computed in closed form. To simplify some of the intermediate steps in the algebra, define the short-hand notation: 
+$\zeta \equiv \Rnorm \MPCU \straight$ and
+$\Rnorm \equiv \Rfree\PGro^{-1}$ and 
+$\straight\equiv\left(\frac{\PatPGro^{-\CRRA}-\erate}{\urate}\right)^{1/\CRRA}$. From this: $\Rfree \MPCU \straight = \zeta \PGro$.  
+A series of straightforward manipulations yields:
+\begin{eqnarray}
+  \left(\frac{\zeta}{1+\zeta}\right)\mTarg^{\null} & = & (1-\Rnorm^{-1})\mTarg^{\null}+\Rnorm^{-1} \notag
+\\  \left(\Rnorm\frac{\zeta}{1+\zeta}\right)\mTarg^{\null} & = & (\Rnorm-1)\mTarg^{\null}+1 \notag
+\\  \left(\Rnorm\left\{\frac{\zeta}{1+\zeta}-1\right\}+1\right)\mTarg^{\null} & = & 1 \notag
+\\  \left(\Rnorm\left\{\frac{\zeta-(1+\zeta)}{1+\zeta}\right\}+\frac{1+\zeta}{1+\zeta}\right)\mTarg^{\null} & = & 1 \notag
+\\  \left(\frac{1+\zeta-\Rnorm}{1+\zeta}\right)\mTarg^{\null} & = & 1 \notag
+\\  \mTarg^{\null} & = & \left(\frac{1+\zeta}{1+\zeta-\Rnorm}\right) \notag
+\\  \mTarg^{\null} & = & \left(\frac{1+\zeta+\Rnorm-\Rnorm}{1+\zeta-\Rnorm}\right) \notag
+\\  \mTarg^{\null} & = & 1 + \left(\frac{\Rnorm}{1+\zeta-\Rnorm}\right) \notag
+\\  \mTarg^{\null} & = & 1 + \left(\frac{\Rfree}{\PGro+\zeta\PGro-\Rfree}\right)  \label{eq:mTarget}
+.
+\end{eqnarray}
+
+A first point about this formula is that:
+\begin{eqnarray}
+  \zeta\PGro & = & \Rfree \MPCU \left(1+\frac{(\Pat/\PGro)^{-\CRRA} - 1}{\urate}\right)^{1/\CRRA}
+\label{eq:zetaPGro}
+\end{eqnarray}
+is likely to increase as $\urate$ vanishes to zero.\footnote{The effect is
+  not necessarily monotonic because $\urate$ affects $\Pat/\PGro$ 
+  as well as the denominator of \eqref{eq:mTarget}; however, for
+  plausible calibrations the effect of the denominator predominates.}
+Note that \eqref{eq:zetaPGro} tends to infinity as $\urate \rightarrow 0$, which implies that $\lim_{\urate \rightarrow 0} \mTarg^{\null} = 1$.  
+This is precisely what would be expected since an impatient consumer is self-constrained to keep 
+$\mRatE > 1$.  
+Thus, as the risk gets infinitesimally small, the
+amount by which the target $\mRatE$ exceeds its minimum possible value shrinks to zero.
+
+We now show that the RIC and GIC ensure that the denominator of the fraction in \eqref{eq:mTarget} is positive:
+\begin{eqnarray*}
+\PGro + \zeta \PGro - \Rfree & = & \PGro + \Rfree \MPCU \straight - \Rfree
+ \\& = & \PGro + \Rfree \left(1- \frac{(\Rfree \Discount)^{1/\rho}}{\Rfree}\right) \left(\frac{(\frac{(\Rfree\Discount)^{1/\CRRA}}{\PGro})^{-\CRRA}-1}{\urate}+1\right)^{1/\CRRA}-\Rfree
+ \\& > &  \PGro+\Rfree \left(1-\frac{(\Rfree\Discount)^{1/\rho}}{\Rfree}\right)
+\left(\frac{(\frac{(\Rfree\Discount)^{1/\CRRA}}{\PGro})^{-\CRRA}-1}{1}+1\right)^{1/\CRRA}-\Rfree
+ \\& = & \PGro+\Rfree\left(1-\frac{(\Rfree\Discount)^{1/\rho}}{\Rfree}\right)\frac{\PGro}{(\Rfree\Discount)^{1/\CRRA}}-\Rfree
+ \\& = & \PGro+\Rfree \frac{\PGro}{(\Rfree\Discount)^{1/\CRRA}}- \PGro - \Rfree
+ \\& = & \Rfree \left(\frac{\PGro}{(\Rfree\Discount)^{1/\CRRA}}-1\right)
+ \\& > & 0.
+\end{eqnarray*}
+
+
+\section{An Approximation for $\mTarg^{\null}$}
+We can obtain further insight into \eqref{eq:mTarget} by using a judicious mix of first- and second-order Taylor expansions. Define the short-hand $\aleph$:
+\begin{eqnarray*}
+%\aleph & = & \left(\frac{(\Pat/\PGro)^{-\CRRA} - 1}{\urate}\right)
+\aleph & = & \frac{(\Pat/\PGro)^{-\CRRA} - 1}{\urate}%removed brackets
+.
+\end{eqnarray*}
+First, substituting $\MPCU = -\patr$ into \eqref{eq:mTarget}, and computing a second-order Taylor expansion:
+\begin{eqnarray}
+  \label{eq:zetaExp}
+  \zeta\PGro & = & \Rfree \MPCU \left(1+\aleph\right)^{1/\CRRA} \notag
+\\ & \approx & -\Rfree \patr \left(1+\CRRA^{-1}\aleph+(\CRRA^{-1})(\CRRA^{-1}-1)(\aleph^{2}/2)\right) \notag
+\\ & = & -\Rfree \patr \left(1+\CRRA^{-1}\aleph\left\{1+\left(\frac{1-\CRRA}{\CRRA}\right)(\aleph/2)\right\}\right)
+. \label{eq:zetaTaylor2}
+\end{eqnarray}
+
+Secondly, applying a first-order Taylor expansion to $\aleph$:
+\begin{eqnarray}
+\label{eq:hatpi}
+\aleph = \frac{(1+\patpGro)^{-\CRRA}-1}{\urate} 
+\approx \frac{1- \CRRA \patpGro-1}{\urate}
+= -\frac{\CRRA \patpGro}{\urate}
+.
+\end{eqnarray}
+Thirdly, substitute \eqref{eq:hatpi} into \eqref{eq:zetaTaylor2}:
+\PTremark{removed a line in the equation below (a reminder of signs of different components is not necessary here, is it?):}
+\begin{eqnarray}
+  \zeta\PGro 
+& \approx &  
+-\Rfree \patr \left(1-(\patpGro/\urate)(1+(1-\CRRA)(-\patpGro/\urate)/2)\right)\\ 
+%& \approx & 
+%\underbrace{-\Rfree \patr}_{>0} \notag \left\{1 / \underbrace{-(\patpGro/\urate)}_{>0}\left(1+\underbrace{(1-\CRRA)}_{<0}\underbrace{(-\patpGro/\urate)}_{>0}/2\right)\right\} 
+\label{eq:zetaGammaApprox}
+.
+\end{eqnarray}
+By our definition of $\prudEx$ (the excess of prudence over the logarithmic benchmark):
+\begin{eqnarray}
+%  \prudEx & \equiv & \left(\frac{\CRRA-1}{2}\right)
+  \prudEx & \equiv & \frac{\CRRA-1}{2}%removed brackets
+.   \notag
+\end{eqnarray}
+Equation~\eqref{eq:mTarget} can then be approximated by:
+\begin{eqnarray}
+ \mTarg^{\null} & \approx & 1 + \left(\frac{1}{\PGro/\Rfree-\patr \left(1-(\patpGro/\urate)(1-(-\patpGro/\urate)\prudEx) \right)-1}\right) \notag
+\\ & \approx & 1 + \left(\frac{1}{(\pGro-\rfree)+(-\patr) \left(1+(-\patpGro/\urate)(1-(-\patpGro/\urate)\prudEx)\right)}\right)
+\label{eq:mTargetApprox}
+\end{eqnarray}
+where negative signs have been preserved in front of the $\patr$ and $\patpGro$ terms as a reminder that
+the GIC and the RIC imply these terms are themselves negative (so that $-\patr$ and $-\patpGro$ are positive).
+An increase in relative risk aversion $\CRRA$, \textit{ceteris paribus}, raises $\prudEx$ and thereby lowers the denominator of \eqref{eq:mTargetApprox}.  This reasoning suggests that
+greater risk aversion results in a larger target level of wealth.\footnote{``Suggests'' rather than proves, because
+this derivation uses approximations; plausible numerical calibrations are in agreement with the suggestion.}
+
+The formula also provides insight about how the human wealth effect
+works in equilibrium.  All else equal, the human wealth effect is captured
+by the $(\pGro-\rfree)$ term in the denominator of \eqref{eq:mTargetApprox}:
+it is obvious that a larger value of $\pGro$ results in a smaller
+target value for $m$.  However, the size of the human wealth
+effect also depends on the magnitude of the patience and prudence contributions to the denominator, and those terms could dominate the human wealth effect.  
+%This reduction in the human wealth effect is interesting because practitioners have known at least since \cite{summersCapTax} that the human wealth effect is implausibly large in the perfect foresight model.
+
+For \eqref{eq:mTargetApprox} to make sense, we need
+the denominator of the fraction to be positive. Let:
+\begin{eqnarray}
+  \patpGrohat & \equiv & \patpGro(1-(-\patpGro/\urate)\prudEx)
+.
+\end{eqnarray}
+The denominator of \eqref{eq:mTargetApprox} is positive if:
+\begin{eqnarray}
+  (\pGro - \rfree) & > & \patr - \patr\patpGrohat/\urate \notag
+%\\   & = & 
+\left(\CRRA^{-1}(\rfree-\timeRate)-\rfree\right)-  \patr\patpGrohat/\urate \notag
+\\ \Rightarrow \pGro & > & \CRRA^{-1}(\rfree-\timeRate)-  \patr\patpGrohat/\urate \notag
+%\\ 0 & > & \underbrace{\CRRA^{-1}(\rfree-\timeRate) - \pGro}_{<0} -  \patr\patpGrohat/\urate \notag
+%\\ \Rightarrow 0 & > & \underbrace{\CRRA^{-1}(\rfree-\timeRate) - \pGro}_{\patpGro} -  \patr(\patpGrohat/\urate) \notag
+\\ \Rightarrow 0 & > & \CRRA^{-1}(\rfree-\timeRate) - \pGro -  \patr(\patpGrohat/\urate) \notag
+\\ \Rightarrow 0 & > & \patpGro -  \patr(\patpGrohat/\urate) \label{eq:newDenom}
+.
+\end{eqnarray}
+From the RIC, we have $\patr<0$; from the GIC, we have $\patpGro<0$; the latter in turn gives $\patpGrohat < 0$; and thus condition \eqref{eq:newDenom} holds.
+\PTremark{I shortened the footnote, might it be removed altogether? I couldn't follow it very well, I wasn't sure what ``the above'' was referring to.}
+\footnote{We implicitly assume that, in the second-order Taylor approximation in \eqref{eq:zetaTaylor2}, the absolute value of the second-order term is negligeable relative to the first-order term, i.e. $|\CRRA^{-1} \aleph | \geq |(\CRRA^{-1})(\CRRA^{-1}-1)(\aleph^{2}/2)|$.}
+%\footnote{In more detail: For the second-order Taylor approximation in \eqref{eq:zetaTaylor2}, we implicitly assume that the absolute value of the second-order term is negligeable relative to the first-order term, i.e. $|\CRRA^{-1} \aleph | \geq |(\CRRA^{-1})(\CRRA^{-1}-1)(\aleph^{2}/2)|$. Substituting \eqref{eq:hatpi}, the above could be simplified to $1 \geq (-\patpGro/\urate)\prudEx$, therefore we have $\patpGrohat < 0$. This simple justification is based on the proof above that RIC and GIC guarantee the denominator of the fraction in \eqref{eq:mTarget} is positive.}
+
+The same set of derivations imply that we can
+replace the denominator in \eqref{eq:mTargetApprox} with the negative
+of the RHS of \eqref{eq:newDenom}, yielding a more compact expression
+for the target level of resources:
+\begin{eqnarray} 
+ \mTarg^{\null} & \approx & 1 + \left(\frac{1}{\patr(\patpGrohat/\urate) - \patpGro }\right) \notag
+\\ & = & 1 + \left(\frac{1/(-\patpGro)}{1+(-\patr/\urate)(1+(-\patpGro/\urate)\prudEx)  }\right) \label{eq:mTargetCompact}
+.
+\end{eqnarray}
+This formula makes plain that an
+increase in either form of impatience raises the denominator of the 
+fraction in 
+\eqref{eq:mTargetCompact} and thus reduces the target level of assets.
+
+Two specializations of the formula are particularly useful.  The first useful special case is $\CRRA = 1$ (logarithmic utility).  In this case,
+\begin{eqnarray*}
+  \prudEx & = & 0
+\\  \patr & = & -\timeRate
+\\  \patpGro & = & \rfree-\timeRate-\pGro
+%\\  \patpGrohat & = & -\pGro
+\end{eqnarray*}
+and the approximation reduces to:
+\begin{eqnarray}
+ \mTarg^{\null} & \approx & 1 + \left(\frac{1}{(\pGro-\rfree)+\timeRate(1+(\pGro+\timeRate-\rfree)/\urate)}\right)
+\label{eq:mTargetCompactLogUtility}
+\end{eqnarray}
+Equation \eqref{eq:mTargetCompactLogUtility} neatly captures the effect of an increase in human wealth (an increase in $\pGro$ or a decrease in $\rfree$), the effect of an increase in impatience $\timeRate$, 
+the effect of a decrease in unemployment risk $\urate$: these reduce target wealth.
+
+
+The second useful special case is $\rfree = \timeRate$ (but $\CRRA>1$).  In this case,
+\begin{eqnarray*}
+    \patr & = & -\timeRate
+\\  \patpGro & = & -\pGro
+\\  \patpGrohat & = & -\pGro (1-(\pGro/\urate)\prudEx)
+\end{eqnarray*}
+and the approximation becomes:
+\begin{eqnarray}
+ \mTarg^{\null} & \approx & 1 + \left(\frac{1}{(\pGro-\rfree)+\timeRate(1+(\pGro/\urate)(1-(\pGro/\urate)\prudEx))}\right)
+ \label{eq:mTargetCompactNeutralPatience}
+\end{eqnarray}
+Equation~\eqref{eq:mTargetCompactNeutralPatience} shows that an increase in the prudence term $\prudEx$
+shrinks the denominator and thereby boosts the target level of
+wealth.\footnote{It would be inappropriate to use the equation to
+  consider the effect of an increase in $\rfree$ because the equation was derived under the
+  assumption $\timeRate=\rfree$, so $\rfree$ is not free to vary.}

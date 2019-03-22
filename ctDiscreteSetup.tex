@@ -1,0 +1,59 @@
+\newcommand{\PTremark}[2][]{PT: {\it #2}}
+\newcommand{\CDCremark}[2][]{CDC: {\it #2}}
+
+\newenvironment{PTinserted}%
+  {\noindent\ignorespaces\color{red}}%
+  {\noindent\ignorespacesafterend}%
+
+\newenvironment{CDCinserted}%
+  {\noindent\ignorespaces\color{green}}%
+  {\noindent\ignorespacesafterend}%
+
+\newenvironment{PTmodified}%
+  {\noindent\ignorespaces\color{red}}%
+  {\noindent\ignorespacesafterend}%
+
+\newenvironment{CDCmodified}%
+  {\noindent\ignorespaces\color{red}}%
+  {\noindent\ignorespacesafterend}%
+
+\newcommand\PTcrossedout[1]{\color{red}{\sout{#1}}\color{black}}
+\newcommand\CDCcrossedout[1]{\color{red}{\sout{#1}}\color{black}}
+
+\let\PTdeleted\comment
+\let\CDCdeleted\comment
+
+\newcommand{\done}{\ding{52}}
+\newcommand{\notdone}{\ding{56}}
+\newcommand{\cut}{\ding{36}}
+\newcommand{\love}{\ding{170}}
+
+
+
+\renewcommand{\tSS}{}
+    %\providecommand{\tSS}{\ensuremath{t}}
+\renewcommand{\urate}{\ensuremath{\mu}}
+    %\providecommand{\urate}{\ensuremath{\mho}}
+\renewcommand{\erate}{(1-\urate)}
+    %\providecommand{\erate}{\ensuremath{\cancel{\mho}}}
+\renewcommand{\mLev}{\ensuremath{m}}
+    %\providecommand{\mLev}{\ensuremath{\pmb{m}}}
+    \renewcommand{\cLev}{\ensuremath{c}}
+        %\providecommand{\cLev}{\ensuremath{\pmb{c}}}
+\renewcommand{\aLev}{\ensuremath{a}}
+    %\providecommand{\aLev}{\ensuremath{\pmb{a}}}
+\renewcommand{\bLev}{\ensuremath{b}}
+    %\providecommand{\bLev}{\ensuremath{\pmb{b}}}
+\renewcommand{\mTarg}{\ensuremath{m}}
+\newcommand{\nablaTarg}{\ensuremath{\nabla}}
+\renewcommand{\aleph}{\ensuremath{\psi}}
+\newcommand{\CEA}{\textsc{cea}}
+\newcommand{\EU}{\textsc{eu}}
+\newcommand{\VectorX}{\ensuremath{\pmb{X}}}
+\newcommand{\VectorCoeff}{\ensuremath{\pmb{\gamma}}}
+
+\usepackage{txfonts}
+
+
+\pdfinclusioncopyfonts=1
+                        

@@ -1,0 +1,384 @@
+\input{./econtexRoot.tex}\input{\econtexRoot/econtexPaths.tex}\documentclass[titlepage,abstract]{\econtex}\newcommand{\textname}{Methods}
+\usepackage{\econtexSetup}\usepackage{\econtexShortcuts}
+\input{\econtexRoot/ctDiscreteSetup.tex}
+
+\bibliographystyle{\econtexBibStyle}\begin{document}
+
+\hfill{\tiny \textname}
+
+\title{A Tractable Model \\ of Buffer Stock Saving: \\ Methods}
+
+\begin{verbatimwrite}{\textname.title}
+A Tractable Model of Buffer Stock Saving
+\end{verbatimwrite}
+
+\author{Christopher D. Carroll\authNum \and Patrick Toche\authNum}%
+
+\keywords{risk, uncertainty, precautionary saving, buffer stock saving}%
+
+\jelclass{C61, D11, E24}%
+
+\maketitle%
+ 
+\begin{abstract}
+  This document briefly describes the methods used to solve the model described in the main paper.
+\end{abstract}
+
+\vspace{0.15in}
+
+\begin{small}
+\parbox{\textwidth}{
+\begin{center}
+\begin{tabbing} 
+\texttt{Archive:~} \= \= \url{http://econ.jhu.edu/people/ccarroll/papers/ctDiscrete.zip} \kill \\  % This line establishes the locations of the tabs, but is not printed because of the \kill directive
+\texttt{~~~~PDF:~} \> \> \url{http://econ.jhu.edu/people/ccarroll/papers/ctDiscrete.pdf} \\
+\texttt{~~~~Web:~} \> \> \url{http://econ.jhu.edu/people/ccarroll/papers/ctDiscrete/}    \\ 
+\texttt{Archive:~} \> \> \url{http://econ.jhu.edu/people/ccarroll/papers/ctDiscrete.zip} \\
+\texttt{~~~~~~~~~} \> \> {\it (Contains Mathematica and Matlab code solving the model)}
+\end{tabbing}
+\end{center}
+}
+\end{small}
+
+\begin{authorsinfo}
+\name{Carroll: \href{mailto:ccarroll@jhu.edu}{\texttt{ccarroll@jhu.edu}}, Department of Economics, Johns Hopkins University, Baltimore Maryland 21218, USA; and National Bureau of Economic Research.  \url{http://econ.jhu.edu/people/ccarroll}
+\name{Toche: \href{mailto:contact@patricktoche.com}{\texttt{contact@patricktoche.com}}, Christ Church, Oxford OX1 1DP, UK.}}
+\end{authorsinfo}%
+
+\thanks{Thanks to several generations of Johns Hopkins University graduate students who helped correct many errors and infelicities in earlier versions of the material presented here.}%
+
+\titlepagefinish%
+
+\section{Numerical Solution}
+
+\subsection{The Consumption Function}
+
+To solve the model by the method of {\it reverse shooting},
+%\footnote{See \cite{judd:book} for a presentation of shooting methods of solution for numerical difference and differential equations.} 
+we need $\cRatE_{t}$ as a function of $\cRatE_{t+1}$.
+\begin{eqnarray*}
+         \left(\frac{\cRatE_{t+1}}{\cRatE_{t}}\right) & = & \PGro^{-1} (\Rfree\Discount)^{1/\CRRA} \left\{1+\urate\left[\left(\frac{\cRatE_{t+1}}{\cU_{t+1}}\right)^{\CRRA}-1\right]\right\}^{1/\CRRA}
+\\       \cRatE_{t} & = & \left(\frac{\cRatE_{t+1}}{\PGro^{-1} (\Rfree\Discount)^{1/\CRRA} \left\{1+\urate\left[\left(\frac{\cRatE_{t+1}}{\MPCU (\mRatE_{t+1}-1)}\right)^{\CRRA}-1\right]\right\}^{1/\CRRA} }  \right)
+\\        & = & \PGro (\Rfree\Discount)^{-1/\CRRA} \cRatE_{t+1}\left\{1+\urate\left[\left(\frac{\cRatE_{t+1}}{\MPCU (\mRatE_{t+1}-1)}\right)^{\CRRA}-1\right]\right\}^{-1/\CRRA}        .
+\end{eqnarray*}
+
+
+We also need the reverse shooting equation for $\mRatE_{t}$:
+\begin{eqnarray*}
+%        \mRatE_{t+1} & = & \Rnorm(\mRatE_{t}-\cRatE_{t})+1  \\
+        \mRatE_{t} & = & \Rnorm^{-1} (\mRatE_{t+1}-1)+\cRatE_{t} .
+\end{eqnarray*}
+
+The reverse shooting approximation will be more accurate if we use it to obtain estimates
+of the marginal propensity to consume as well.  These are obtained 
+by differentiating the consumption Euler equation with respect to $m_{t}$:
+\begin{eqnarray}
+  \uP(\cFunc^{e}(m_{t})) & = & \overbrace{\Rnorm \Discount \PGro^{1-\CRRA}}^{\beth} \Ex_{t}[\uP(\cFunc^{\bullet}(m_{t+1}))] \notag
+\\  \uFunc^{\prime\prime}(\cFunc^{e}(m_{t}))\MPCFunc^{e}(m_{t}) & = & \beth  \Rnorm (1-\MPCFunc^{e}(m_{t}))\Ex_{t}[\uFunc^{\prime\prime}(\cFunc^{\bullet}(m_{t+1}))\MPCFunc^{\bullet}(m_{t+1})] \label{eq:dEuler}
+\end{eqnarray}
+so that defining $\MPCE_{t} = \MPCFunc^{e}(m_{t})$ we have 
+\begin{eqnarray}
+ \MPCE_{t} & = &  (1-\MPCE_{t}) \underbrace{\beth \Rnorm  (1/\uPP(\cRatE_{t}))\Ex_{t}\left[\uPP(c^{\bullet}_{t+1})\MPC^{\bullet}_{t+1}\right]}_{\equiv \natural_{t+1}}  \label{eq:natural}
+\\ (1+\natural_{t+1})\MPCE_{t} & = & \natural_{t+1} \label{eq:naturalMPC} 
+\\ \MPCE_{t} & = & \left(\frac{\natural_{t+1}}{1+\natural_{t+1}}\right) \label{eq:naturalSolved}
+.
+\end{eqnarray}
+\newcommand{\Mma}{{\it Mathematica}~}
+
+At the target level of $\mRatE$,
+\begin{eqnarray*}
+  \overbrace{(1/\uPP(\cTarg^{e}))\Ex_{t}\left[\uPP(c^{\bullet})\MPC^{\bullet}\right]}^{\check{\natural} / \Rnorm \beth} & = & \erate \overbrace{(\uPP(\cTarg^{e})/\uPP(\cTarg^{e}))}^{=1}\MPCE+\urate (\uPP(\cTarg^{u})/\uPP(\cTarg^{e}))\MPCU
+\end{eqnarray*}
+so that 
+\begin{eqnarray}
+  \check{\natural} & = &  \beth \Rnorm (\erate \MPCE + \urate (\cTarg^{u}/\cTarg^{e})^{-\CRRA-1} \MPCU)
+\end{eqnarray}
+yielding from \eqref{eq:naturalMPC} a quadratic equation in $\MPCE$:
+\begin{eqnarray}
+  \left(1+\beth \Rnorm (\erate \MPCE + \urate (\cTarg^{u}/\cTarg^{e})^{-\CRRA-1}  \MPCU) \right)\MPCE & = & \beth \Rnorm (\erate \MPCE + \urate (\cTarg^{u}/\cTarg^{e})^{-\CRRA-1} \MPCU)
+\end{eqnarray} 
+which has one solution for $\MPCE$ in the interval $[0,1]$, which is the MPC at target wealth.\footnote{The 
+\Mma code constructs this derivative and solves the quadratic equation analytically; the Matlab code simply copies
+the analytical formula generated by \Mma.}
+
+The limiting MPC as consumption approaches zero, $\bar{\MPC}^{e},$ will also be useful; this is obtained
+by noting that utility in the employed state next year becomes asymptotically irrelevant as $\cRatE_{t}$ approaches zero, so that 
+\begin{eqnarray*}
+  \lim_{\cRatE_{t} \rightarrow 0}  \overbrace{ \beth \Rnorm \MPCE_{t+1} \left(\erate (\cRatE_{t+1}/\cRatE_{t})^{-\CRRA-1}  + \urate (\cU_{t+1}/\cRatE_{t})^{-\CRRA-1}\MPCU\right)}^{\natural_{t+1}} & = & \beth \Rnorm \urate (\cU_{t+1}/\cRatE_{t})^{-\CRRA-1}\MPCU
+\\  & = & \beth \Rnorm \urate (\MPCU \Rnorm \aE_{t}/(\aE_{t}(\bar{\MPC}^{e}/(1-\bar{\MPC}^{e})))^{-\CRRA-1})\MPCU
+\\ & = & \beth \Rnorm \urate (\MPCU \Rnorm ((1-\bar{\MPC}^{e})/\bar{\MPC}^{e}))^{-\CRRA-1}\MPCU
+%\\ & = & \beth \Rnorm \urate (\MPCU \Rnorm)^{-\CRRA-1} \MPCU
+\end{eqnarray*}
+so that from \eqref{eq:naturalSolved} we have 
+\begin{eqnarray}
+  \bar{\MPC}^{e} \equiv \lim_{\mRat_{t} \rightarrow 0} \MPCFunc^{e}(m_{t}) & = & \left(\frac{
+\beth \Rnorm \urate (\MPCU \Rnorm ((1-\bar{\MPC}^{e})/\bar{\MPC}^{e}))^{-\CRRA-1}\MPCU
+}{1+
+\beth \Rnorm \urate (\MPCU \Rnorm ((1-\bar{\MPC}^{e})/\bar{\MPC}^{e}))^{-\CRRA-1}\MPCU
+}\right)
+\end{eqnarray}
+which implicitly defines $\bar{\MPC}^{e}$.  After parameter values
+have been defined a numerical rootfinder can calculate a solution
+almost instantly.
+
+Finally, it will be useful to have an estimate of the curvature
+(second derivative) of the consumption function at the target.  This
+can be obtained by a procedure analogous to the one used to obtain the
+MPC: differentiate the differentiated Euler equation \eqref{eq:dEuler}
+again and substitute the target values.  Noting that
+$\MPC^{u\prime}=0$, we can obtain:
+\begin{eqnarray}
+(\MPCFunc^{e}_{t})^{2} \uPPP(\cFunc^{e}_{t})
++\MPCFunc_{t}^{e\prime}\uPP(\cFunc^{e}_{t})= &  & 
+\beth \Rnorm \left\{(-\MPCFunc_{t}^{e\prime}) \Ex_{t}[\uPP(\cFunc^{\bullet}_{t+1})\MPCFunc^{\bullet}_{t+1}] \right. \\
+& + & %\left. 
+\Rnorm (1-\MPCFunc^{e}_{t})^{2}\left(\Ex_{t}[(\MPCFunc_{t+1}^{\bullet})^{2}\uPPP(\cFunc^{\bullet}_{t+1})]+\erate  \uPP(\cFunc^{e}_{t+1})\MPCFunc_{t+1}^{e\prime}\right) \nonumber
+\label{eq:kappaPExpr}
+\end{eqnarray}
+\begin{comment} % The following attempts to derive an expression that will be useful in determining a functional form for \MPC^{e \prime} as c goes to infinity
+the limit of which as $\cRatE_{t} \rightarrow \infty$ is 
+\begin{eqnarray}
+\lefteqn{  (\MPCE)^{2} \uPPP(\cRatE_{t}) +\MPC^{e\prime}\uPP(\cRatE_{t}) = } &  & \nonumber \\ 
+& & \beth \Rnorm (-\MPC^{e\prime}) \Ex_{t}[\uPP(\cFunc^{\bullet}_{t+1})\MPC^{\bullet}_{t+1}]
+ + \beth \Rnorm^{2} (1-\MPCE)^{2} (\Ex_{t}[(\MPC_{t+1}^{\bullet})^{2}\uPPP(\cFunc^{\bullet}_{t+1})]+\erate \uPP(\cRatE_{t+1})\MPC^{e\prime}) \nonumber
+\end{eqnarray}
+but since as $\cRatE_{t} \rightarrow \infty$ the ratio of $\cRatE/\cTarg^{u}$ approaches 1 this approaches
+\begin{eqnarray}
+\lefteqn{  (\MPCE)^{2} \uPPP({c}_{t}) +\MPC^{e\prime}_{t}\uPP(c_{t}) = } &  & \nonumber \\ 
+& & \beth \Rnorm (-\MPC^{e\prime}_{t}) \uPP(c_{t+1})\MPC
+ + \beth \Rnorm^{2} (1-\MPCE)^{2} (\MPCE)^{2}\uPPP(c_{t+1})+\erate \uPP({c}_{t+1})\MPC^{e\prime}_{t+1}) \nonumber
+\end{eqnarray}
+but since $c_{t+1}$ approaches $\mu c_{t}$ this can be rewritten
+\begin{eqnarray}
+\lefteqn{  (\MPCE)^{2} \uPPP({c}_{t}) +\MPC^{e\prime}_{t}\uPP(c_{t}) = } &  & \nonumber \\ 
+& & \beth \Rnorm (-\MPC^{e\prime}_{t}) \uPP(c_{t}) \mu^{-\CRRA-1}\MPC
+ + \beth \Rnorm^{2} (1-\MPCE)^{2} (\MPCE)^{2}\uPPP(c_{t})\mu^{-\CRRA-2}+\erate \uPP({c}_{t})\mu^{-\CRRA-2}\MPC^{e\prime}_{t+1}) \nonumber
+\end{eqnarray}
+and dividing both sides by $\uPP(c_{t})$ and realizing that $\uPPP(c)/\uPP(c) = (\CRRA+1)/c$ we have
+\begin{eqnarray}
+\lefteqn{  (\MPCE)^{2} (\CRRA+1)/c_{t} +\MPC^{e\prime}_{t}= } &  & \nonumber \\ 
+& & \beth \Rnorm (-\MPC^{e\prime}_{t})  \mu^{-\CRRA-1}\MPC
+ + \beth \Rnorm^{2} (1-\MPCE)^{2} (\MPCE)^{2}\mu^{-\CRRA-2}(\CRRA+1)/c_{t}+\erate \mu^{-\CRRA-2}\MPC^{e\prime}_{t+1}) \nonumber
+\end{eqnarray}
+\end{comment}
+so that
+\begin{eqnarray}
+\MPCFunc^{e\prime}_{t}   & = & \left(\frac{\beth \Rnorm^{2} (1-\MPCFunc^{e}_{t})^{2} \left( \Ex_{t}[(\MPCFunc_{t+1}^{\bullet})^{2}\uPPP(\cFunc^{\bullet}_{t+1})] +\erate \uPP(\cFunc^{e}_{t+1}) \MPCFunc^{e \prime}_{t+1}\right)-(\MPCFunc^{e}_{t})^{2} \uPPP(\cFunc^{e}_{t})}{\uPP(\cFunc^{e}_{t})+\beth \Rnorm \Ex_{t}[\uPP(\cFunc^{\bullet}_{t+1})\MPCFunc^{\bullet}_{t+1}]  }\right) \nonumber
+\end{eqnarray}
+%leading to a dynamic equation for $\MPC_{t}^{e\prime}$
+%\begin{eqnarray}
+%\MPC_{t}^{e\prime} & = & \left(\frac{\beth \Rnorm^{2} (1-\MPCE_{t})^{2} (\Ex_{t}[(\MPC_{t+1}^{\bullet})^{2}\uPPP(c^{\bullet}_{t+1})]+\erate \uPP(\cRatE_{t+1}) -(\MPCE_{t})^{2} \uPPP(\cRatE_{t}))}{\uPP(\cRatE_{t})+\beth \Rnorm \Ex_{t}[\uPP(c^{\bullet}_{t+1})\MPC^{\bullet}_{t+1}]}\right)  \nonumber
+%\end{eqnarray}
+%whose limit as $\cRatE \rightarrow \infty$ is 
+which can be further simplified at the target because $\MPCFunc^{e \prime}_{t}(\mTarg^{\null}) = \MPCFunc^{e \prime}_{t+1}(\mTarg^{\null}) = \MPC^{e \prime}$ so that
+\begin{eqnarray}
+\MPC^{e\prime} & = & \left(\frac{\beth \Rnorm^{2} (1-\MPCE)^{2}\Ex_{t}[(\MPC^{\bullet})^{2} \uPPP(c^{\bullet})] -(\MPCE)^{2} \uPPP(\cTarg^{e})}{\uPP(\cTarg^{e}) + \beth \Rnorm \Ex_{t}[\uPP(c^{\bullet})\MPC^{\bullet}]- \beth \Rnorm^{2} (1-\MPCE)^{2}\erate \uPP(\cTarg^{e})}\right) \label{eq:MPCPrimeSS}
+.
+\end{eqnarray}
+
+Another differentiation of \eqref{eq:kappaPExpr} similarly allows the construction of a formula for the value of $\MPC^{e \prime\prime}$ at the target $\mTarg^{\null}$; in principle, any number of derivatives can be 
+constructed in this manner.\footnote{\Mma permits the convenient computation of the analytical derivatives, and then the substitution of constant target values to obtain analytical expressions like \eqref{eq:MPCPrimeSS}.  These solutions are simply imported by hand into the Matlab code.}
+
+
+\begin{comment} % There's something wrong with the argument below, but I'm not sure what.
+% Anyway, this approach is superceded by the one below.
+Since $-\uPPP/\uPP = (\CRRA+1) / c$, intuition suggests (and deeper analysis confirms) that $\lim_{\mRatE_{t} \rightarrow \infty} \MPCFunc^{e \prime}(\mRatE_{t})$ is well approximated by $\gamma/\mRatE_{t}$ for some constant $\gamma$.  Indeed,
+since $\lim_{\mRatE_{t} \rightarrow \infty} \MPCFunc(\mRatE_{t}) = \MPC$ and the limiting difference between
+$\cFunc^{e}$ and $\cFunc^{u}$ is finite, analysis like that which led to \eqref{eq:MPCPrimeSS} should convince
+the reader that
+\begin{eqnarray}
+\lim_{\mRatE_{t} \rightarrow \infty} \MPCFunc^{e\prime}(\mRatE_{t}) & = & \left(\frac{\uPPP(\cRatE_{t}) (\beth \Rnorm^{2} (1-\MPC)^{2}\MPC^{2}  -\MPC^{2}) }{\uPP(\cTarg^{e})(1-\beth \Rnorm^{2} (1-\MPC)^{2}\erate  + \beth \Rnorm \MPC}\right)
+\\ & = & -(1/\cRatE_{t})\left(\frac{(\CRRA+1) (\beth \Rnorm^{2} (1-\MPC)^{2}-1)\MPC^{2}  }{1-\beth \Rnorm^{2} (1-\MPC)^{2}\erate  + \beth \Rnorm \MPC}\right)
+\\ & = & -(1/\mRatE_{t})\left(\frac{(\CRRA+1) (\beth \Rnorm^{2} (1-\MPC)^{2}-1)\MPC  }{1-\beth \Rnorm^{2} (1-\MPC)^{2}\erate  + \beth \Rnorm \MPC}\right)
+.
+\end{eqnarray}
+\end{comment}
+
+
+Reverse shooting requires us to solve separately for an approximation to the consumption function above the steady state and 
+another approximation below the steady state.  Using the approximate steady-state $\MPCE$ and $\MPC^{e\prime}$ 
+obtained above, we begin by picking a very small number for $\blacktriangle$ and then creating a Taylor
+approximation to the consumption function near the steady state:
+\begin{eqnarray}
+  \mRatE_{\Alt{t}} & = & \mTarg^{\null} + \blacktriangle  \label{eq:revshootmstart} 
+\\ \tilde{\mathbf{c}}(\blacktriangle) & = & \cTarg^{e} + \blacktriangle \MPCE + (\blacktriangle^{2}/2) \MPC^{e\prime}+ (\blacktriangle^{3}/6) \MPC^{e\prime\prime} \label{eq:revshootcstart}
+%\\ \MPCE_{\Alt{t}} & = & \hat{\MPCFunc}^{e}(\blacktriangle)
+\end{eqnarray}
+and then iterate the reverse-shooting equations until we reach some period $n$ in
+which $\mRatE_{\Alt{t}-n}$ escapes some pre-specified interval $[\ushort{\mRat}^{e},\bar{\mRat}^{e}]$ (where the natural 
+value for $\ushort{\mRat}^{e}$ is 1 because this is the $\mRat$ that would be owned by a consumer who had saved
+nothing in the prior period and therefore is below any feasible value of $\mRat$ that could be realized by an 
+optimizing consumer).  This generates a sequence of points all of which
+are on the consumption function.  A parallel procedure (substituting $-$ for
+$+$ in \eqref{eq:revshootmstart} and where appropriate in \eqref{eq:revshootcstart}) generates the sequence of points for the approximation below the 
+steady state.  Taken together with the already-derived characterization of the function
+at the target level of wealth, these points constitute the basis for an interpolating approximation to the
+consumption function on the interval $[\ushort{\mRat}^{e},\bar{\mRat}^{e}]$.
+
+
+
+\subsection{The Value Function}
+
+As a preliminary, note that since $\uFunc(xy)=\uFunc(x)y^{1-\CRRA}$, value for an unemployed consumer is 
+\begin{eqnarray}
+  \VFunc_{t}^{u} & = & \uFunc(C_{t}^{u})+\Discount \uFunc(C_{t+1}^{u}) + \Discount^{2} \uFunc(C_{t+2}^{u})+...
+\\ & = & \uFunc(C_{t}^{u})\left(1+\Discount \{(\Rfree \Discount)^{1/\CRRA}\}^{1-\CRRA} + \Discount^{2}\left\{(\Rfree \Discount)^{2/\CRRA}\right\}^{1-\CRRA}+...\right)
+\\ & = & \uFunc(C_{t}^{u})\underbrace{\left(\frac{1}{1-\Discount (\Rfree \Discount)^{(1/\CRRA)-1}}\right)}_{\equiv \mathfrak{v}}
+\end{eqnarray}
+where the RIC guarantees that the denominator in the fraction is a positive number.  
+
+From this we can see that value for the normalized problem is similarly:
+\begin{eqnarray}
+  \vFunc^{u}(m_{t}) & = & \uFunc(\MPCU m_{t}) \mathfrak{v}
+.
+\end{eqnarray}
+
+Turning to the problem of the employed consumer, we have
+\begin{eqnarray}
+  \vFunc^{e}(m_{t}) & = & \uFunc(\cRatE_{t})+\Discount \PGro^{1-\CRRA} \Ex_{t}[\vFunc^{\bullet}(m_{t+1})]
+\end{eqnarray}
+and at the target level of market resources this will be unchanging for a consumer who
+remains employed so that 
+\begin{eqnarray}
+  \vTarg^{e} & = & \uFunc(\cTarg^{e})+\Discount \PGro^{1-\CRRA} \left(\erate \vTarg^{e} + \urate \vFunc^{u}(\aE \Rnorm)\right)
+\\ (1-\Discount \PGro^{1-\CRRA} \erate) \vTarg^{e} & = & \uFunc(\cTarg^{e})+\Discount \PGro^{1-\CRRA} \urate \vFunc^{u}(\aE \Rnorm)
+\\ \vTarg^{e} & = & \left(\frac{\uFunc(\cTarg^{e})+\Discount \PGro^{1-\CRRA} \urate \vFunc^{u}(\aE \Rnorm)}{(1-\Discount \PGro^{1-\CRRA} \erate) }\right)
+.
+\end{eqnarray}
+
+Given these facts, our recursion for generating a sequence of points on the consumption
+function can be used at the same time to generate corresponding points on the value function from
+\begin{eqnarray}
+  \vE_{t} & = & \uFunc(\cRatE_{t})+\Discount \PGro^{1-\CRRA} \left(\erate \vE_{t+1} + \urate \vFunc^{u}(\aE_{t} \Rnorm)\right)
+\end{eqnarray}
+with the first iteration point generated by numerical integration from 
+\begin{eqnarray}
+  v^{e}_{\Alt{t}} & = & \vTarg^{e}+\int_{0}^{\blacktriangle} \uP(\tilde{\mathbf{c}}(\bullet)) d\bullet
+\end{eqnarray}
+
+
+
+\section{The Algorithm}
+
+With the above results in hand, the model is solved and the various
+functions constructed as follows.  Define $\star_{t} =
+\{\mRatE_{t},\cRatE_{t},\MPCE_{t},\vE_{t},\MPC_{t}^{e\prime}\}$ as a vector of points that
+characterizes a particular situation that an optimizing employed
+household might be in at any given point in time.  Using the backwards-shooting 
+functions derived above, for any point $\star_{\Alt{t}}$ we can construct the
+sequence of points that must have led up to it: $\star_{\Alt{t}-1}$ and
+$\star_{\Alt{t}-2}$ and so on.  And using the approximations near the
+steady state like \eqref{eq:revshootcstart}, we can construct 
+a vector-valued function $\pmb{\circ}(\blacktriangle)$ that generates, 
+e.g., $\{\mTarg^{\null}+\blacktriangle,\tilde{\mathbf{c}}(\blacktriangle), ... \}$.
+
+
+Now define an operator $\cdots$ as follows: $\cdots$ applied to some
+starting point $\star_{t}$ uses the backwards dynamic equations
+defined above to produce a vector of points
+$\star_{t-1},\star_{t-2},...$ consistent with the model until the
+$\mRatE_{t-n}$ that is produced goes outside of the pre-defined bounds 
+$[\ushort{\mRat}^{e},\bar{\mRat}^{e}]$ for solving the problem.
+
+We can merge the points below the steady state with the steady state
+with the points above the steady state to produce $\dddot{\star} =
+\cdots(\pmb{\circ}(-\varepsilon)) \cup \pmb{\circ}(0) \cup
+\cdots(\pmb{\circ}(\varepsilon)) $.  These points can then be used to
+generate appropriate interpolating approximations to the consumption
+function and other desired functions.
+
+Designate, e.g., the vector of points on the consumption function
+generated in this manner by $\dddot{\star}[c]$, so that 
+\begin{eqnarray}
+   \{\dddot{\star}[m],\{\dddot{\star}[c],\dddot{\star}[\MPC^{e}],\dddot{\star}[\MPC^{e\prime}]\}^{\intercal}\}^{\intercal} & = & 
+\begin{pmatrix}
+m[1] & \{c[1],\MPC^{e}[1],\MPC^{e\prime}[1]\} \\
+m[2] & \{c[2],\MPC^{e}[2],\MPC^{e\prime}[2]\} \\
+...  & ...              \\
+m[N] & \{c[N],\MPC^{e}[N],\MPC^{e\prime}[N]\} \\
+\end{pmatrix} \label{eq:cFuncMat}
+\end{eqnarray}
+where $N$ is the number of points that have been generated by the merger of the backward
+shooting points described above.  
+
+The object \eqref{eq:cFuncMat} is not an arbitrary example; it reflects a set of values that 
+uniquely define a fourth order piecewise polynomial spline such that at every point in the 
+set the polynomial matches the level and first derivative included in the list.  Standard
+numerical mathematics software can produce the interpolating function with this input; 
+for example, the syntax in \Mma is simply
+\begin{eqnarray}
+  \mathtt{cE} & = & \mathtt{Interpolation}[\{\dddot{\star}[m],\{\dddot{\star}[c],\dddot{\star}[\MPC^{e}],\dddot{\star}[\MPC^{e\prime}]\}^{\intercal}\}^{\intercal}].
+\end{eqnarray}
+which creates a function $\texttt{cE}$ that is a $\mathbf{C}^4$ interpolating polynomial
+connecting these points.
+
+
+
+
+The reverse shooting algorithm terminates at some finite maximum point $\bar\mRat$, but for completeness 
+it is useful to have an approximation to the consumption function that is reasonably well behaved
+for any $\mTarg^{\null}$ no matter how large.\footnote{An extrapolation of the approximating interpolation will 
+not perform well; a polynomial approximation will inevitably ``blow up'' if evaluated at large enough $\mTarg^{\null}$.}
+
+Since we know that the consumption function in the presence of uncertainty asymptotes to the 
+perfect foresight function, we adopt the following approach.  Defining the level of precautionary
+saving as\footnote{Mnemonic: This is the amount of consumption that is canceled as a result of uncertainty.}
+\newcommand{\psav}{\cancel{c}}
+\newcommand{\psavFunc}{\ensuremath{\cancel{\cFunc}}}
+\begin{eqnarray}
+  \label{eq:pSavFunc}
+  \psavFunc(\mRat) & = & \bar{\cFunc}(\mRat)-\cFunc(\mRat),
+\end{eqnarray}
+we know (see the discussion below in appendix section \ref{sec:PGroGEQRfree}) that 
+\begin{eqnarray}
+  \lim_{\mRat \rightarrow \infty} \psavFunc(\mRat) = 0
+.
+\end{eqnarray}
+
+Defining $\vec{\mRat}=m-\bar{\mRat}$, a convenient functional form to postulate for the
+propensity to precautionary-save is
+\begin{eqnarray}
+  \psavFunc(\mRat) & = & e^{\phi_{0}-\phi_{1} \vec{\mRat}}+e^{\gamma_{0}-\gamma_{1} \vec{\mRat}}
+\end{eqnarray}
+with derivatives
+\begin{eqnarray}
+    \psavFunc^{\prime}(\mRat) & = & -\phi_{1} e^{\phi_{0}-\phi_{1} \vec{\mRat}} - \gamma_{1} e^{\gamma_{0}-\gamma_{1} \vec{\mRat}}
+\\  \psavFunc^{\prime\prime}(\mRat) & = & \phantom{-}\phi_{1}^{2} e^{\phi_{0}-\phi_{1} \vec{\mRat}} + \gamma_{1}^{2} e^{\gamma_{0}-\gamma_{1} \vec{\mRat}}
+\\  \psavFunc^{\prime\prime\prime}(\mRat) & = & -\phi_{1}^{3} e^{\phi_{0}-\phi_{1} \vec{\mRat}} - \gamma_{1}^{3} e^{\gamma_{0}-\gamma_{1} \vec{\mRat}}
+.
+\end{eqnarray}
+
+Evaluated at $\bar{\mRat}$ (for which $\psavFunc$ and its derivatives will have numerical values
+assigned by the reverse-shooting solution method described above), this is a system of four equations in four unknowns and, though nonlinear, can be easily solved for 
+values of the $\phi$ and $\gamma$ coefficients that match the level and first three derivatives
+of the ``true'' $\psavFunc$ function.\footnote{The exact symmetry in
+  the treatment of $\gamma$ and $\phi$ means that there will actually
+  be two symmetrical solutions; either can be used.}
+
+
+
+
+\section{Modified Formulas For Case Where $\PGro \geq \Rfree$} \label{sec:PGroGEQRfree}
+
+The text asserts that if $\PGro < \Rfree$ the consumption function for a finite-horizon employed consumer approaches
+the $\bar{\cFunc}_{t}(\mRat)$ function that is optimal for a perfect-foresight
+consumer with the same horizon,
+\begin{eqnarray}
+  \lim_{\mRat \uparrow \infty} \bar{\cFunc}_{t}(\mRat) - \cFunc_{t}(\mRat) & = & 0
+.
+\end{eqnarray}
+
+This proposition can be proven by careful analysis of the consumption Euler equation,
+noting that as $\mRat$ approaches infinity the proportion of consumption will
+be financed out of (uncertain) labor income approaches zero, and that the magnitude
+of the precautionary effect is proportional to the square of the proportion of such
+consumption financed out of uncertain labor income.
+
+A footnote also claims that for employed consumers, $\cFunc(\mRat)$
+approaches a different, but still well-defined, limit even if $\PGro
+\geq \Rfree$, so long as the impatience condition holds. It turns out that the limit 
+in question is the one defined by the solution to a perfect foresight problem with 
+liquidity constraints.  A semi-analytical solution does exist in this case, but it 
+is omitted.  %A continuous-time treatement can be found in \cite{parkLiqConstrContinuous}.
+
+\end{document}

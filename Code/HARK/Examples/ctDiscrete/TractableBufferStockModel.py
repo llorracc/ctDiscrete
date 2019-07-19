@@ -6,56 +6,21 @@
 #     text_representation:
 #       extension: .py
 #       format_name: percent
-#       format_version: '1.1'
-#       jupytext_version: 0.8.3
+#       format_version: '1.2'
+#       jupytext_version: 1.1.3
 #   kernelspec:
 #     display_name: Python 3
 #     language: python
 #     name: python3
-#   language_info:
-#     codemirror_mode:
-#       name: ipython
-#       version: 3
-#     file_extension: .py
-#     mimetype: text/x-python
-#     name: python
-#     nbconvert_exporter: python
-#     pygments_lexer: ipython3
-#     version: 3.6.7
-#   varInspector:
-#     cols:
-#       lenName: 16
-#       lenType: 16
-#       lenVar: 40
-#     kernels_config:
-#       python:
-#         delete_cmd_postfix: ''
-#         delete_cmd_prefix: 'del '
-#         library: var_list.py
-#         varRefreshCmd: print(var_dic_list())
-#       r:
-#         delete_cmd_postfix: ') '
-#         delete_cmd_prefix: rm(
-#         library: var_list.r
-#         varRefreshCmd: 'cat(var_dic_list()) '
-#     types_to_exclude:
-#     - module
-#     - function
-#     - builtin_function_or_method
-#     - instance
-#     - _Feature
-#     window_display: false
 # ---
 
 # %% [markdown]
 # # A Tractable Model of Buﬀer Stock Saving
-# <p style="text-align: center;"><small><small>Generator: TractableBufferStockModel</small></small></p>
-
-# %% [markdown]
-# [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/llorracc/ctDiscrete/master?filepath=Code%2FHARK%2FExamples%2FctDiscrete%2FTractableBufferStockModel.ipynb)
+# <p style="text-align: center;"><small><small>Generator: TractableBufferStockModel-make/notebooks_byname</small></small></p>
 
 # %% [markdown]
 # This notebook uses the [Econ-ARK/HARK](https://github.com/econ-ark/hark) toolkit to describe the main results and reproduce the figures in the paper [A Tractable Model of Buffer Stock Saving](http://www.econ2.jhu.edu/people/ccarroll/papers/ctDiscrete/)
+#
 #
 # If you are not familiar with the HARK toolkit, you may wish to browse the ["Gentle Introduction to HARK"](https://mybinder.org/v2/gh/econ-ark/DemARK/master?filepath=Gentle-Intro-To-HARK.ipynb) before continuing (since you are viewing this document, you presumably know a bit about [Jupyter Notebooks](https://jupyter-notebook-beginner-guide.readthedocs.io/en/latest/)).
 #
@@ -64,7 +29,7 @@
 # The main HARK tool used here is $\texttt{TractableBufferStockModel.py}$, in which agents have CRRA utility and face only a very particular sort of risk: the possibility that he will become permanently unemployed until
 # the day he dies.
 
-# %% {"code_folding": [0]}
+# %% {"code_folding": []}
 # This cell does some setup and imports generic tools used to produce the figures
 
 Generator=False # Is this notebook the master or is it generated?
@@ -164,23 +129,29 @@ if Generator:
 # W_{t+1} & = & W_{t} G
 # \end{eqnarray}
 #
-# $\ell$ measures the consumer’s labor productivity (hours of work for an employed consumer are assumed to be exogenous and fixed) and $\xi$ is a dummy variable indicating the consumer’s employment state: Everyone in this economy is either employed ($\xi = 1$, a state indicated by the letter ‘$e$’) or unemployed ($\xi = 0$, a state indicated by ‘$u$’), so that next period's market resources are:
+# and $l$ measures the consumer’s labor productivity (hours of work for an employed consumer are assumed to be exogenous and fixed) and $\xi$ is a dummy variable indicating the consumer’s employment state: Everyone in this economy is either employed ($\xi = 1$, a state indicated by the letter ‘$e$’) or unemployed ($\xi = 0$, a state indicated by ‘$u$’), so that next period's market resources are:
 # \begin{eqnarray}
-# %m_{t+1} &=& b_{t+1} +W_{t+1} \ell_{t+1} \xi_{t+1},  \notag
-# m_{t+1} &=& a_{t}R + W_{t+1} \ell_{t+1} \xi_{t+1}.  \notag
+# %m_{t+1} &=& b_{t+1} +W_{t+1} l_{t+1} \xi_{t+1},  \notag
+# m_{t+1} &=& a_{t}R + W_{t+1} l_{t+1} \xi_{t+1}.  \notag
 # \end{eqnarray}
 #
 # When the consumer has a CRRA utility function $u(c)=\frac{c^{1-\rho}}{1-\rho}$, the paper shows that the Bellman form of problem is:
 #
 # \begin{eqnarray*}
-# v_t(m_t) &=& \max_{c_t}~u(c_t) + \beta \left((1-\wp)v_{t+1}^{e}(m_{t+1})+\wp v_{t+1}^{u}(m_{t+1})\right), \\
+# V_t(m_t) &=& \max_{c_t} U(c_t) + \beta \left((1-p)V_{t+1}^{e}(m_{t+1})+p V_{t+1}^{u}(m_{t+1})\right), \\
 # & s.t. & \\
 # a_t &=& m_t - c_t, \\
-# m_{t+1} &=& R a_t + \ell_{t+1}\xi_{t+1}W_{t+1}
+# m_{t+1} &=& R a_t + \mathbb{1}(Y_{t+1}), \\
+# Y_{t+1} &=& \Gamma_{t+1} Y_t,
 # \end{eqnarray*}
 #
+# where $\mathbb{1}$ is an indicator of whether the consumer is employed in the next period.
+#
 
-# %% {"code_folding": [0]}
+# %%
+from HARK.ConsumptionSaving.TractableBufferStockModel import TractableConsumerType
+
+# %% {"code_folding": []}
 # Define a parameter dictionary with baseline parameter values
 
 # Set the baseline parameter values 
@@ -219,9 +190,6 @@ TBS_dictionary = {
         'tax_rate':0.0,
     }
 
-# %% {"code_folding": []}
-from HARK.ConsumptionSaving.TractableBufferStockModel import TractableConsumerType
-
 
 # %% [markdown]
 # ### Figure 1 : Phase Diagram
@@ -230,41 +198,43 @@ from HARK.ConsumptionSaving.TractableBufferStockModel import TractableConsumerTy
 # From equations (23) and (24) in the paper, we know that the steady state levels of $m^e$ (market resources when employed), and $c^e$ (consumption when employed), are defined, respectively, by the following two equations:
 #
 # \begin{eqnarray*}
-# c^e_{t} &=&(1-\mathcal{R}^{-1})m^e_{t} + \mathcal{R}^{-1}, \\
-# c^e_{t} &=& \frac{\mathcal{R} \kappa^{u} m^e_{t} \Pi}{(1+\mathcal{R} \kappa^{u} \Pi)}
+# c^e &=&(1-R^{-1})m^e + R^{-1}, \\
+# c^e &=& \frac{Rkm^e\Pi}{(1+Rk\Pi)}
 # \end{eqnarray*}
 #
 # We can use these equations to plot a phase diagram
 
-# %% {"code_folding": [0]}
+# %% {"code_folding": []}
 # Define the functions we need to compute from the above two equations
-def Pat(R, DiscFac, CRRA, PermGroFacCmp):
-    Pat = (R * DiscFac)**(1.0/CRRA)/PermGroFacCmp
-    return Pat
+def PatienceFactor(R, DiscFac, CRRA, PermGroFacCmp):
+    PatienceFactor = (R * DiscFac)**(1.0/CRRA)/PermGroFacCmp
+    return PatienceFactor
 
 def PiFunc(R, DiscFac, CRRA, UnempPrb, PermGroFacCmp):
-    PatGro = Pat(R, DiscFac, CRRA, PermGroFacCmp)
-    Pi = (1+(PatGro**(-CRRA)-1.0)/UnempPrb)**(1/CRRA)
+    PatFacGrowth = PatienceFactor(R, DiscFac, CRRA, PermGroFacCmp)
+    Pi = (1+(PatFacGrowth**(-CRRA)-1.0)/UnempPrb)**(1/CRRA)
     return Pi
     
 def mEDelEqZero(R, mE): # Function that gives us locus of where change in mE is zero
     cE = (1-R**(-1))*mE + R**(-1)
     return cE
 
-def cEDelEqZero(R, κ, Pi, mE): # Function that gives us locus of where change in cE is zero
-    cE = (R*κ*mE*Pi)/(1+R*κ*Pi)
+def cEDelEqZero(R, k, Pi, mE): # Function that gives us locus of where change in cE is zero
+    cE = (R*k*mE*Pi)/(1+R*k*Pi)
     return cE
 
-# %% {"code_folding": [0]}
-# Setup and solve an instance of the tractable buffer stock model
 
+# %% {"code_folding": []}
+# Define and solve the model
+
+MyTBStype = TractableConsumerType(**TBS_dictionary)
 MyTBStype.solve()
 
 UnempPrb = MyTBStype.UnempPrb
 DiscFac = MyTBStype.DiscFac
 R = MyTBStype.Rfree
 PermGroFacCmp = MyTBStype.PermGroFacCmp
-κ = MyTBStype.PFMPC
+k = MyTBStype.PFMPC
 CRRA = MyTBStype.CRRA
 Rnrm = MyTBStype.Rnrm
 Pi = PiFunc(R, DiscFac, CRRA, UnempPrb, PermGroFacCmp)
@@ -273,9 +243,11 @@ Pi = PiFunc(R, DiscFac, CRRA, UnempPrb, PermGroFacCmp)
 mE_range = np.linspace(0,8, 1000)
 cE = MyTBStype.solution[0].cFunc(mE_range)
 
+# %% {"code_folding": []}
+# Plot 
 plt.figure(figsize=(12,9))
 plt.plot(mE_range, mEDelEqZero(Rnrm, mE_range), 'k-') 
-plt.plot(mE_range, cEDelEqZero(Rnrm, κ, Pi, mE_range), 'k-')
+plt.plot(mE_range, cEDelEqZero(Rnrm, k, Pi, mE_range), 'k-')
 plt.plot(mE_range, cE, 'k--')   
 plt.ylim(0, 2.4)
 plt.xlim(0, 8)
@@ -311,29 +283,28 @@ else:
 # Figure 2 shows the optimal consumption function $c(m)$ for an employed consumer (dropping the e superscript to reduce clutter). This is of course the stable arm of the phase diagram. Also plotted are the 45 degree line along which $c_{t} = m_{t}$ and
 #
 # \begin{eqnarray*}
-# \bar{c}(m) &=&(m-1+h)κ^{u}, \\
+# \bar{c}(m) &=&(m-1+h)k^{u}, \\
 # \end{eqnarray*}
 #
 # where
 #
 # \begin{eqnarray*}
-# h &=&\left(\frac{1}{1- G/R}\right) \\
+# h &=&(\frac{1}{1- G/R}) \\
 # \end{eqnarray*}
 #
 # is the level of (normalized) human wealth. $\bar{c}(m)$  is the solution to the no-risk version of the model; it is depicted in order to introduce another property of the model: As wealth approaches inﬁnity, the solution to the problem with risky labor income approaches the solution to the no-risk problem arbitrarily closely.
 
-# %% {"code_folding": [0]}
-# Make the consumption function and its asymptotes
+# %%
 h = MyTBStype.h
-def PerfForesightC(h, κ, mE):
-    cE = (mE-1+h)*κ
+def PerfForesightC(h, k, mE):
+    cE = (mE-1+h)*k
     return cE
 
 mE_range = np.linspace(0,60,1000)
 mE_range1 = np.linspace(0,6,1000)
 cE = MyTBStype.solution[0].cFunc(mE_range)
 plt.figure(figsize=(12,10))
-plt.plot(mE_range, PerfForesightC(h, κ, mE_range), 'k--') # Plot the first equation
+plt.plot(mE_range, PerfForesightC(h, k, mE_range), 'k--') # Plot the first equation
 plt.plot(mE_range, cE, 'k-')
 plt.plot(mE_range1, mE_range1, 'k--')
 plt.ylim(0, 7)
@@ -363,9 +334,7 @@ else:
 # %% [markdown]
 # Figure 3 illustrates some of the key points in a diﬀerent way. It depicts the growth rate of consumption $c_{t+1}^{e} /c_{t}^{e}$ as a function of $m_{t}^{e}$.
 
-# %% {"code_folding": [0]}
-# Make the growth rate figure
-
+# %%
 mE_range = np.linspace(0,15, 1000)
 cE = MyTBStype.solution[0].cFunc(mE_range)
 cU = MyTBStype.solution[0].cFunc_U(mE_range)
@@ -387,9 +356,9 @@ plt.tick_params(labelbottom=False, labelleft=False,left='off',right='off',bottom
 plt.text(8.1,-0.041,"$m_{t}^{e}$",fontsize = 22)
 plt.text(0,0.061,r'Growth',fontsize = 22)
 plt.text(-0.2,np.log(PermGroFacCmp), r'$\gamma$',fontsize = 22)
-plt.text(-1.7,thorn, r'$\rho^{-1}(r-\vartheta) \approx\phi$',fontsize = 22)
+plt.text(-1.7,thorn, r'$\rho^{-1}(r-\theta) \approx\phi$',fontsize = 22)
 plt.text(mTarg-0.1,-0.045, r'$\check{m^{e}}$',fontsize = 22)
-plt.text(2.5,0.025, r'$\Delta \log \  c_{t+1}^{e} \approx \phi + \wp(1 + \omega \nabla_{t+1})\nabla_{t+1} $',
+plt.text(2.5,0.025, r'$\Delta log \  c_{t+1}^{e} \approx \phi + \wp(1 + \omega \nabla_{t+1})\nabla_{t+1} $',
          fontsize = 22)
 plt.text(2.5,thorn +0.008, r'Precautionary Increment:$\wp(1 + \omega \nabla_{t+1})\nabla_{t+1}$',fontsize = 22)
 plt.text(7.2,thorn +0.006, r'$\{$', fontsize = 55)
@@ -406,10 +375,9 @@ else:
     plt.show(block=True)
 
 # %% [markdown]
-# ### Figure 4 : The Effects of an Increase in the Interest Rate
+# ### Figure 4 : The Effects of an Increase in Interest Rate
 
-# %% {"code_folding": [0]}
-# Experiment: An increase in the interest rate 
+# %%
 MyTBStype_1 = TractableConsumerType(**TBS_dictionary)
 Rnew = MyTBStype.Rfree + 0.04
 MyTBStype_1.Rfree = Rnew 
@@ -446,12 +414,12 @@ plt.text(8.1,-0.041,"$m_{t}^{e}$",fontsize = 22)
 plt.text(0,0.05,r'Growth',fontsize = 22)
 plt.tick_params(labelbottom=False, labelleft=False,left='off',right='off',bottom='off',top='off')
 plt.text(-0.2,np.log(PermGroFacCmp), r'$\gamma$',fontsize = 22)
-plt.text(-1.7,thorn, r'$\rho^{-1}(r-\vartheta) \approx\phi$',fontsize = 22)
-plt.text(-1.75,thorn_1, r'$\rho^{-1}(r^{\prime}-\vartheta) \approx \phi^{\prime}$',fontsize = 22)
+plt.text(-1.7,thorn, r'$\rho^{-1}(r-\theta) \approx\phi$',fontsize = 22)
+plt.text(-1.75,thorn_1, r'$\rho^{-1}(r^{\prime}-\theta) \approx \phi^{\prime}$',fontsize = 22)
 plt.text(mTarg-0.1,-0.045, r'$\check{m}$',fontsize = 22)
 plt.text(mTarg_1-0.1,-0.045, r'$\check{m}^{\prime}$',fontsize = 22)
-plt.text(0.8,0.025, r'$\Delta \log \  c_{t+1}^{e}$',fontsize = 22)
-plt.text(6.2,0.0015, r'$\Delta \log \ c_{t+1}^{e} \prime$',fontsize = 22)
+plt.text(0.8,0.025, r'$\Delta log \  c_{t+1}^{e}$',fontsize = 22)
+plt.text(6.2,0.0015, r'$\Delta log \ c_{t+1}^{e} \prime$',fontsize = 22)
 plt.arrow(1.85,0.027,0.25,0,head_width= 0.001,head_length = 0.05,width=0.0001,facecolor='black',
           length_includes_head='True')
 plt.arrow(6.15,thorn,0,0.018,head_width= 0.05,head_length = 0.0025,width=0.01,facecolor='black',
@@ -471,8 +439,7 @@ else:
 # %% [markdown]
 # ### Figure 5 : The Effects of an Increase in Unemployment Risk
 
-# %% {"code_folding": [0]}
-# Experiment: An increase in unemployment risk
+# %%
 MyTBStype_2 = TractableConsumerType(**TBS_dictionary)
 Unempnew = MyTBStype.UnempPrb * 3
 MyTBStype_2.UnempPrb = Unempnew
@@ -512,10 +479,10 @@ plt.text(0,0.072,r'Growth',fontsize = 22)
 plt.tick_params(labelbottom=False, labelleft=False,left='off',right='off',bottom='off',top='off')
 plt.text(-0.2,np.log(PermGroFacCmp), r'$\gamma$',fontsize = 22)
 plt.text(-0.22,np.log(PermGroFacCmp_2), r'$\gamma^{\prime}$',fontsize = 22)
-plt.text(-1.7,thorn, r'$\rho^{-1}(r-\vartheta) \approx\phi$',fontsize = 22)
+plt.text(-1.7,thorn, r'$\rho^{-1}(r-\theta) \approx\phi$',fontsize = 22)
 plt.text(mTarg-0.1,-0.045, r'$\check{m}$',fontsize = 22)
 plt.text(mTarg_2-0.1,-0.045, r'$\check{m}^{\prime}$',fontsize = 22)
-plt.text(1.5,0.05, r'$\Delta \log \ c_{t+1}^{e} \prime$',fontsize = 18)
+plt.text(1.5,0.05, r'$\Delta log \ c_{t+1}^{e} \prime$',fontsize = 18)
 plt.text(1.5,0.005, r'Original Eqbm',fontsize = 18)
 plt.text(5.3,0.025, r'New Target',fontsize = 18)
 plt.arrow(2.8,0.0059,0.25,0.002,head_width= 0.001,head_length = 0.05,width=0.0001,facecolor='black',
@@ -538,10 +505,9 @@ else:
     plt.show(block=True)
 
 # %% [markdown]
-# ### Figure 6: The Effects of Lower $\vartheta$ On Consumption Function
+# ### Figure 6: The Effects of Lower $\theta$ On Consumption Function
 
-# %% {"code_folding": [0]}
-# Experiment: A decline in the time preference rate 
+# %%
 MyTBStype_3 = TractableConsumerType(**TBS_dictionary)
 DiscFacnew = (1/(1.1-0.02))
 MyTBStype_3.DiscFac = DiscFacnew
@@ -592,10 +558,9 @@ else:
     plt.show(block=True)
 
 # %% [markdown]
-# ### Figure 7: Path of $c^{e}$ Before and After $\vartheta$ Decline
+# ### Figure 7: Path of $c^{e}$ Before and After $\theta$ Decline
 
-# %% {"code_folding": [0]}
-# Experiment: Time path of consumption around a time preference rate decline
+# %%
 MyTBStype.T_sim = 100
 MyTBStype.aLvlInitMean = 1.
 MyTBStype.aLvlInitStd = 0.
@@ -647,10 +612,9 @@ else:
     plt.show(block=True)
 
 # %% [markdown]
-# ### Figure 8 : Path of $m^{e}$ Before and After $\vartheta$ Decline
+# ### Figure 8 : Path of $m^{e}$ Before and After $\theta$ Decline
 
-# %% {"code_folding": [0]}
-# Market resources around a time preference rate decline
+# %%
 plt.figure(figsize=(12,9))
 plt.scatter(TimePeriod, mE, color = 'k',s =6)
 plt.text(121,0, r'Time', fontsize = 22)
@@ -670,11 +634,9 @@ else:
     plt.show(block=True)
 
 # %% [markdown]
-# ### Figure 9 : Marginal Propensity to Consume $\kappa_{t}$ Before and After $\vartheta$ Decline
+# ### Figure 9 : Marginal Propensity to Consume $\kappa_{t}$ Before and After $\theta$ Decline
 
-# %% {"code_folding": [0]}
-# MPC around a time preference rate decline
-
+# %%
 MPC = np.zeros((115,1))
 MPC[:15,:] = MyTBStype.solution[0].cFunc.eval_with_derivative(ssmE)[1]
 MPC[15:,:] = MyTBStype_3.solution[0].cFunc.eval_with_derivative(MyTBStype_3.mLvlNow_hist)[1][10:]
